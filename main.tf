@@ -1,12 +1,20 @@
 terraform {
   required_providers {
     grafana = {
-      source  = "grafana/grafana"
+      source = "grafana/grafana"
+      # Version > 2.3.1 is required for the automation of the OnCall contact point
       version = "2.3.1"
     }
   }
 }
 
+# ================================================================================
+# | You need to configure the oncall, as well as the grafana portion since the   |
+# | manifests will also create a contact point in grafana alerting.              |
+# |                                                                              |
+# | If you configure the contact point manually, you can remove the resource in  |
+# | the manifests and the `url` and `auth` properties in the provider.           |
+# ================================================================================
 provider "grafana" {
   oncall_access_token = var.oncall_access_token
   oncall_url          = var.oncall_url

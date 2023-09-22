@@ -1,0 +1,17 @@
+direction: right
+grafana: Grafana {
+  alerting: Alerting {
+    contactpoint: Contact Point
+  }
+  oncall: OnCall {
+    integration: Grafana Integration
+    escalation: Escalation Chain
+    integration -> escalation
+
+    schedule: OnCall Schedule
+    notification -> schedule
+
+  }
+}
+
+grafana.alerting.contactpoint -> grafana.oncall.integration
