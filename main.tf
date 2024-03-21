@@ -2,8 +2,18 @@ terraform {
   required_providers {
     grafana = {
       source  = "grafana/grafana"
-      version = "2.3.1"
+      version = "2.14.2"
     }
+  }
+
+  # =====================================
+  # | TODO: CHANGE THIS TO YOUR BACKEND |
+  # =====================================
+
+  backend "s3" {
+    bucket = "grafanalabs-act-kit-tfstate"
+    key    = "act-kit/tfstate-gh-actions"
+    region = "us-west-2"
   }
 }
 
@@ -40,7 +50,7 @@ module "schedule" {
   source = "./schedules/simple-rotation"
   team_members = [
     "dominiksuess",
-    "dominiksuessdevextest",
+    # "ishanjain",
   ]
 }
 
@@ -50,9 +60,9 @@ module "schedule" {
 #     "dominiksuess",
 #   ]
 #   team_members_apac = [
-#     "dominiksuessapacuser",
+#     "ishanjain",
 #   ]
 #   team_members_amer = [
-#     "dominiksuessdevextest",
+#     "serena",
 #   ]
 # }
