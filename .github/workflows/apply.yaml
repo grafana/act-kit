@@ -1,0 +1,39 @@
+on:
+  push:
+    branches:
+      - 'main'
+jobs:
+  tfapply:
+    name: 'Terraform Apply'
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: hashicorp/setup-terraform@v3
+
+    - name: Terraform fmt
+      id: fmt
+      run: terraform fmt -check
+      continue-on-error: true
+
+    - name: Terraform Init
+      id: init
+      run: terraform init
+      env:
+        AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
+        AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+
+    - name: Terraform Validate
+      id: validate
+      run: terraform validate -no-color
+
+    - name: Terraform Apply
+      id: apply
+      run: terraform apply -auto-approve
+      continue-on-error: true
+      env:
+        TF_VAR_grafana_url: ${{ secrets.GRAFANA_URL }}
+        TF_VAR_grafana_access_token: ${{ secrets.GRAFANA_ACCESS_TOKEN }}
+        TF_VAR_oncall_url: ${{ secrets.ONCALL_URL }}
+        TF_VAR_oncall_access_token: ${{ secrets.ONCALL_ACCESS_TOKEN }}
+        AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY_ID}}
+        AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}

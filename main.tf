@@ -50,7 +50,7 @@ module "schedule" {
   source = "./schedules/simple-rotation"
   team_members = [
     "dominiksuess",
-    # "ishanjain",
+    "ishanjain",
   ]
 }
 
