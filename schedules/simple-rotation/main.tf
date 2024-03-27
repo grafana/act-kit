@@ -7,6 +7,11 @@ terraform {
   }
 }
 
+variable "name" {
+  type    = string
+  default = "Example Calendar Schedule"
+}
+
 variable "team_members" {
   type = list(string)
 }
@@ -18,7 +23,7 @@ variable "time_zone" {
 
 variable "start" {
   type    = string
-  default = "2023-09-17T00:00:00"
+  default = "2024-01-01T00:00:00"
 }
 
 output "schedule_id" {

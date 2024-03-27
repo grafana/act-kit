@@ -1,7 +1,7 @@
 resource "grafana_oncall_schedule" "timezone" {
   name      = "Timezone Calendar Schedule"
   type      = "calendar"
-  time_zone = var.time_zone
+  time_zone = "UTC"
   shifts = [
     grafana_oncall_on_call_shift.daytime_emea.id,
     grafana_oncall_on_call_shift.daytime_apac.id,
@@ -32,7 +32,7 @@ resource "grafana_oncall_on_call_shift" "daytime_amer" {
   week_start    = "MO"
   by_day        = ["MO", "TU", "WE", "TH", "FR", "SA", "SU"]
   rolling_users = [for oncall_user in data.grafana_oncall_user.amer_users : [oncall_user.id]]
-  time_zone     = var.time_zone
+  time_zone     = "UTC"
 }
 
 resource "grafana_oncall_on_call_shift" "daytime_emea" {
@@ -45,7 +45,7 @@ resource "grafana_oncall_on_call_shift" "daytime_emea" {
   week_start    = "MO"
   by_day        = ["MO", "TU", "WE", "TH", "FR", "SA", "SU"]
   rolling_users = [for oncall_user in data.grafana_oncall_user.emea_users : [oncall_user.id]]
-  time_zone     = var.time_zone
+  time_zone     = "UTC"
 }
 
 resource "grafana_oncall_on_call_shift" "daytime_apac" {
@@ -58,5 +58,5 @@ resource "grafana_oncall_on_call_shift" "daytime_apac" {
   week_start    = "MO"
   by_day        = ["MO", "TU", "WE", "TH", "FR", "SA", "SU"]
   rolling_users = [for oncall_user in data.grafana_oncall_user.apac_users : [oncall_user.id]]
-  time_zone     = var.time_zone
+  time_zone     = "UTC"
 }
