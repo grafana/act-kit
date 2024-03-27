@@ -17,14 +17,9 @@ variable "team_members_apac" {
   type = list(string)
 }
 
-variable "time_zone" {
-  type    = string
-  default = "UTC"
-}
-
 variable "start" {
   type    = string
-  default = "2023-09-17T00:00:00"
+  default = "2024-01-01T00:00:00"
 }
 
 output "schedule_id" {
