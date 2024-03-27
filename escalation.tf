@@ -9,3 +9,5 @@ resource "grafana_oncall_escalation" "notify_oncall" {
   notify_on_call_from_schedule = module.schedule.schedule_id
   position                     = 0
 }
+
+// Check out https://registry.terraform.io/providers/grafana/grafana/latest/docs/resources/oncall_escalation for possible escalation steps

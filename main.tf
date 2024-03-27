@@ -63,6 +63,6 @@ module "schedule" {
 #     "ishanjain",
 #   ]
 #   team_members_amer = [
-#     "serena",
+#     "serenakei",
 #   ]
 # }
