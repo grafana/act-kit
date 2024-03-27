@@ -13,7 +13,7 @@ To use this repository:
 1. Set the environment variables to your values:
     + `TF_VAR_grafana_access_token`
     + `TF_VAR_oncall_access_token`
-    + `TF_VAR_oncall_url=`
+    + `TF_VAR_oncall_url`
     + `TF_VAR_grafana_url`
 
     This needs to be done in your respective CI settings or your local env if
@@ -43,3 +43,22 @@ Check out the [Terraform provider documenation](https://registry.terraform.io/pr
 The [`integration.tf`](./integration.tf) file contains the resources needed to connect the Grafana alerting system with OnCall.
 It configures the Grafana notification policy to send all alerts to OnCall.
 You should not have to modify anything in this file.
+
+Below you can find a visualization of the way the alert flows through the system
+
+```mermaid
+flowchart LR
+  subgraph Grafana
+    direction LR
+    CP -- notifies --> OnCall
+    subgraph Alerting
+      CP[Contact Point]
+    end
+    subgraph OnCall
+      direction TB
+      IN[Grafana Integration] -- triggers --> EC[Escalation Chain]
+      EC -- step --> N[Notification]
+      N -- fetches OnCall user from --> Schedule
+    end
+  end
+```
