@@ -10,7 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - uses: hashicorp/setup-terraform@v3
+      with:
+        persist-credentials: false
+
+    - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
 
     - name: Terraform fmt
       id: fmt
@@ -41,10 +44,17 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
 
 
-    - uses: actions/github-script@v6
+    - uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
       if: github.event_name == 'pull_request'
       env:
         PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+        VALIDATE_STDOUT: "${{ steps.validate.outputs.stdout }}"
+        INIT_OUTCOME: "${{ steps.init.outcome }}"
+        VALIDATE_OUTCOME: "${{ steps.validate.outcome }}"
+        FMT_OUTCOME: "${{ steps.fmt.outcome }}"
+        PLAN_OUTCOME: "${{ steps.plan.outcome }}"
+        GITHUB_ACTOR: "${{ github.actor }}"
+        GITHUB_WORKFLOW: "${{ github.workflow }}"
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
@@ -59,18 +69,18 @@ jobs:
           })
 
           // 2. Prepare format of the comment
-          const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
-          #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
-          #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
+          const output = `#### Terraform Format and Style 🖌\`${ process.env.FMT_OUTCOME }\`
+          #### Terraform Initialization ⚙️\`${ process.env.INIT_OUTCOME }\`
+          #### Terraform Validation 🤖\`${ process.env.VALIDATE_OUTCOME }}\`
           <details><summary>Validation Output</summary>
 
           \`\`\`\n
-          ${{ steps.validate.outputs.stdout }}
+          ${process.env.VALIDATE_STDOUT}
           \`\`\`
 
           </details>
 
-          #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+          #### Terraform Plan 📖\`${ process.env.PLAN_OUTCOME }\`
 
           <details><summary>Show Plan</summary>
 
@@ -80,7 +90,7 @@ jobs:
 
           </details>
 
-          *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Workflow: \`${{ github.workflow }}\`*`;
+          *Pusher: @${ process.env.GITHUB_ACTOR }, Action: \`${{ github.event_name }}\`, Workflow: \`${ process.env.GITHUB_WORKFLOW }\`*`;
 
           // 3. If we have a comment, update it, otherwise create a new one
           if (botComment) {
