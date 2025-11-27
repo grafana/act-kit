@@ -41,7 +41,7 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
 
 
-    - uses: actions/github-script@v6
+    - uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
       if: github.event_name == 'pull_request'
       env:
         PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
