@@ -9,8 +9,8 @@ jobs:
     name: 'Terraform Plan'
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - uses: hashicorp/setup-terraform@v3
+    - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+    - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3
 
     - name: Terraform fmt
       id: fmt
@@ -41,7 +41,7 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
 
 
-    - uses: actions/github-script@v6
+    - uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6
       if: github.event_name == 'pull_request'
       env:
         PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
